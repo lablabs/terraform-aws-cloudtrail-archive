@@ -1,5 +1,6 @@
 module "label" {
-  source      = "../label"
+  source  = "lablabs/label/terraform"
+  version = "0.4.0"
   namespace   = var.namespace
   environment = var.environment
   stage       = var.stage
