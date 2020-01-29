@@ -1,4 +1,7 @@
-variable "source_environments" {
+variable "source_environment" {
+}
+
+variable "push_access_accounts_ids" {
   default = []
 }
 

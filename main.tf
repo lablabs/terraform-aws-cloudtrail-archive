@@ -12,10 +12,9 @@ module "label" {
 }
 
 resource "aws_s3_bucket" "default" {
-  count         = length(var.source_environments)
-  bucket        = "${module.label.name}-${var.source_environments[count.index].name}"
+  bucket        = "${module.label.name}-${var.source_environment}"
   force_destroy = var.force_destroy
-  policy        = data.aws_iam_policy_document.bucket_policy[count.index].json
+  policy        = data.aws_iam_policy_document.bucket_policy.json
 
   versioning {
     enabled = var.versioning_enabled
@@ -50,13 +49,11 @@ resource "aws_s3_bucket" "default" {
 }
 
 data "aws_iam_policy_document" "bucket_policy" {
-  count = length(var.source_environments)
-
   statement {
     sid       = "AWSCloudTrailAclCheck20131101"
     effect    = "Allow"
     actions   = ["s3:GetBucketAcl"]
-    resources = ["arn:aws:s3:::${module.label.name}-${var.source_environments[count.index].name}"]
+    resources = ["arn:aws:s3:::${module.label.name}-${var.source_environment}"]
 
     principals {
       identifiers = ["cloudtrail.amazonaws.com"]
@@ -70,8 +67,8 @@ data "aws_iam_policy_document" "bucket_policy" {
     actions   = ["s3:PutObject"]
   
     resources = formatlist(
-      "arn:aws:s3:::${module.label.name}-${var.source_environments[count.index].name}/AWSLogs/%s/*", 
-      var.source_environments[count.index].push_access_accounts_ids
+      "arn:aws:s3:::${module.label.name}-${var.source_environment}/AWSLogs/%s/*", 
+      var.push_access_accounts_ids
     )
 
     principals {
