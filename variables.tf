@@ -63,3 +63,11 @@ variable "versioning_enabled" {
 variable "force_destroy" {
   default = false
 }
+
+variable "rotate_keys" {
+  default = true
+}
+
+variable "key_deletion_window" {
+  default = 30
+}
